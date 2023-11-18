@@ -13,12 +13,13 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Product(null, title, imageUrl, description, price);
-  product
-    .save()
-    .then(() => {
-      res.redirect("/");
-    })
+  Product.create({
+    title: title,
+    price: price,
+    description: description,
+    imageUrl: imageUrl,
+  })
+    .then((res) => console.log(res))
     .catch((err) => console.log(err));
 };
 
@@ -59,10 +60,10 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) =>
+  Product.findAll()
+    .then((product) =>
       res.render("admin/products", {
-        prods: rows,
+        prods: product,
         pageTitle: "Admin Products",
         path: "/admin/products",
       })
